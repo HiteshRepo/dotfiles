@@ -40,6 +40,21 @@ else
   echo "aider .aider.conf.yml symlinked"
 fi
 
+# ─── Shell env vars ───────────────────────────────────────────────────────────
+SHELL_PROFILE=""
+if [ -f "$HOME/.zshrc" ]; then SHELL_PROFILE="$HOME/.zshrc"
+elif [ -f "$HOME/.bashrc" ]; then SHELL_PROFILE="$HOME/.bashrc"
+fi
+
+if [ -n "$SHELL_PROFILE" ]; then
+  if ! grep -q "REQUESTS_CA_BUNDLE" "$SHELL_PROFILE"; then
+    echo 'export REQUESTS_CA_BUNDLE=""' >> "$SHELL_PROFILE"
+    echo "REQUESTS_CA_BUNDLE added to $SHELL_PROFILE"
+  else
+    echo "REQUESTS_CA_BUNDLE already in $SHELL_PROFILE"
+  fi
+fi
+
 LLM_CONFIG_DIR="$HOME/.config/io.datasette.llm"
 LLM_MODELS_FILE="$LLM_CONFIG_DIR/extra-openai-models.yaml"
 LLM_MODELS_SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/config/llm/extra-openai-models.yaml"
