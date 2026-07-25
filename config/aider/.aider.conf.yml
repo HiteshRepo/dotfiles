@@ -2,5 +2,5 @@
 # Set the API key in your shell profile:
 #   export OPENAI_API_KEY=<litellm-master-key>
 
-openai-api-base: https://litellm.lab.hiteshp.in/v1
+openai-api-base: http://localhost:4000/v1
 model: openai/gpt-4o
