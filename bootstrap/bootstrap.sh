@@ -4,3 +4,4 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 "$SCRIPT_DIR/setup-github-known-hosts.sh"
 "$SCRIPT_DIR/setup-ssh-key.sh"
+"$SCRIPT_DIR/setup-dev-tools.sh"
