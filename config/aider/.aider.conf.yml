@@ -3,4 +3,4 @@
 #   export OPENAI_API_KEY=<litellm-master-key>
 
 openai-api-base: https://litellm.lab.hiteshp.in/v1
-model: litellm/gpt-4o
+model: openai/gpt-4o
