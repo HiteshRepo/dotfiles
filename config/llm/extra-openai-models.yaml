@@ -1,40 +1,40 @@
 # LiteLLM proxy — routes all models through the homelab gateway
 # api_key_name: openai refers to the LiteLLM master key set via: llm keys set openai <master-key>
 
-# ─── OpenAI ───────────────────────────────────────────────────────────────────
-- model_id: gpt-4o
+# ─── OpenAI via LiteLLM ───────────────────────────────────────────────────────
+- model_id: litellm/gpt-4o
   model_name: gpt-4o
   api_base: "https://litellm.lab.hiteshp.in"
   api_key_name: openai
 
-- model_id: gpt-4o-mini
+- model_id: litellm/gpt-4o-mini
   model_name: gpt-4o-mini
   api_base: "https://litellm.lab.hiteshp.in"
   api_key_name: openai
 
-# ─── Anthropic ────────────────────────────────────────────────────────────────
-- model_id: claude-opus-4-5
+# ─── Anthropic via LiteLLM ────────────────────────────────────────────────────
+- model_id: litellm/claude-opus-4-5
   model_name: claude-opus-4-5
   api_base: "https://litellm.lab.hiteshp.in"
   api_key_name: openai
 
-- model_id: claude-sonnet-4-5
+- model_id: litellm/claude-sonnet-4-5
   model_name: claude-sonnet-4-5
   api_base: "https://litellm.lab.hiteshp.in"
   api_key_name: openai
 
-# ─── Ollama (local) ───────────────────────────────────────────────────────────
-- model_id: ollama/llama3.2:3b
+# ─── Ollama (local) via LiteLLM ───────────────────────────────────────────────
+- model_id: litellm/llama3.2:3b
   model_name: ollama/llama3.2:3b
   api_base: "https://litellm.lab.hiteshp.in"
   api_key_name: openai
 
-- model_id: ollama/qwen2.5:3b
+- model_id: litellm/qwen2.5:3b
   model_name: ollama/qwen2.5:3b
   api_base: "https://litellm.lab.hiteshp.in"
   api_key_name: openai
 
-- model_id: ollama/phi3.5
+- model_id: litellm/phi3.5
   model_name: ollama/phi3.5
   api_base: "https://litellm.lab.hiteshp.in"
   api_key_name: openai
