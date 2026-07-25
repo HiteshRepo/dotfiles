@@ -14,6 +14,36 @@ dev-tools: ## Install dev tools (uv, llm) and symlink configs
 homelab: ## Clone and set up k3s-homelab (Ubuntu homelab laptop only)
 	bash bootstrap/setup-homelab.sh
 
+# ─── AI Tools ────────────────────────────────────────────────────────────────
+
+.PHONY: install-aider
+install-aider: ## Install aider via uv
+	uv tool install --force --python python3.12 --with pip aider-chat@latest
+
+KEY ?= ""
+
+.PHONY: set-ai-key
+set-ai-key: ## Set LiteLLM master key for llm and aider (usage: make set-ai-key KEY=<master-key>)
+	@if [ -z "$(KEY)" ]; then \
+	  echo "Error: pass the key — make set-ai-key KEY=<master-key>"; exit 1; \
+	fi
+	@llm keys set openai $(KEY)
+	@echo "llm key set"
+	@SHELL_PROFILE=""; \
+	if [ -f "$$HOME/.zshrc" ]; then SHELL_PROFILE="$$HOME/.zshrc"; \
+	elif [ -f "$$HOME/.bashrc" ]; then SHELL_PROFILE="$$HOME/.bashrc"; \
+	fi; \
+	if [ -n "$$SHELL_PROFILE" ]; then \
+	  if grep -q "^export OPENAI_API_KEY=" "$$SHELL_PROFILE"; then \
+	    sed -i "s|^export OPENAI_API_KEY=.*|export OPENAI_API_KEY=$(KEY)|" "$$SHELL_PROFILE"; \
+	    echo "OPENAI_API_KEY updated in $$SHELL_PROFILE"; \
+	  else \
+	    echo "export OPENAI_API_KEY=$(KEY)" >> "$$SHELL_PROFILE"; \
+	    echo "OPENAI_API_KEY added to $$SHELL_PROFILE"; \
+	  fi; \
+	fi
+	@echo "Run: source $$HOME/.zshrc (or .bashrc) to apply in current shell"
+
 # ─── Symlinks ─────────────────────────────────────────────────────────────────
 
 .PHONY: symlink-aider
