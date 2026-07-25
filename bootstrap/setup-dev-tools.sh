@@ -48,8 +48,9 @@ fi
 
 if [ -n "$SHELL_PROFILE" ]; then
   if ! grep -q "REQUESTS_CA_BUNDLE" "$SHELL_PROFILE"; then
-    echo 'export REQUESTS_CA_BUNDLE=""' >> "$SHELL_PROFILE"
-    echo "REQUESTS_CA_BUNDLE added to $SHELL_PROFILE"
+    echo 'export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt' >> "$SHELL_PROFILE"
+    echo 'export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt' >> "$SHELL_PROFILE"
+    echo "Python SSL env vars added to $SHELL_PROFILE"
   else
     echo "REQUESTS_CA_BUNDLE already in $SHELL_PROFILE"
   fi
