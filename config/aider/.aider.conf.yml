@@ -4,3 +4,12 @@
 
 openai-api-base: http://localhost:4000/v1
 model: openai/gpt-4o
+
+model-aliases:
+  local-llama: openai/ollama/llama3.2:3b
+  local-qwen: openai/ollama/qwen2.5:3b
+  local-phi: openai/ollama/phi3.5
+  local-gpt4o: openai/gpt-4o
+  local-gpt4o-mini: openai/gpt-4o-mini
+  local-opus: openai/claude-opus-4-5
+  local-sonnet: openai/claude-sonnet-4-5
