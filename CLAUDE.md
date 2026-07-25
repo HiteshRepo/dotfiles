@@ -10,16 +10,25 @@ Personal machine bootstrap and configuration management system. Automates the se
 
 ```bash
 # Bootstrap a new machine (runs all setup scripts in sequence)
-bash bootstrap/bootstrap.sh
+make bootstrap          # or: bash bootstrap/bootstrap.sh
 
-# Optional: setup homelab k3s cluster (Ubuntu only, run after bootstrap)
-bash bootstrap/setup-homelab.sh
+# Individual steps (all idempotent)
+make dev-tools          # Install uv, llm, aider; symlink configs
+make homelab            # Clone k3s-homelab (Ubuntu homelab only)
+
+# AI tool setup
+make install-aider      # Install aider via uv (python3.12)
+make set-ai-key KEY=<master-key>  # Set LiteLLM key in keys.json + shell profile
+
+# Symlink management (run manually if bootstrap was skipped)
+make symlink-aider      # ~/.aider.conf.yml → config/aider/.aider.conf.yml
+make symlink-llm        # ~/.config/io.datasette.llm/extra-openai-models.yaml → config/llm/
 
 # Verify setup after bootstrap
-ssh-add -l                # Check loaded SSH keys
-uv --version              # Verify uv package manager
-llm --version             # Verify llm CLI
-llm models list           # Check configured LLM models
+ssh-add -l              # Check loaded SSH keys
+uv --version            # Verify uv package manager
+llm --version           # Verify llm CLI
+llm models list         # Check configured LLM models
 ```
 
 ## Architecture
@@ -28,9 +37,10 @@ llm models list           # Check configured LLM models
 
 ```
 bootstrap/bootstrap.sh (main entry)
+├── setup-git.sh                 → Install git, set global user.name/email
 ├── setup-github-known-hosts.sh  → Add GitHub to ~/.ssh/known_hosts
 ├── setup-ssh-key.sh             → Generate Ed25519 key, add to ssh-agent
-└── setup-dev-tools.sh           → Install uv + llm CLI, symlink llm config
+└── setup-dev-tools.sh           → Install uv + llm + aider; symlink configs
 
 setup-homelab.sh (optional, homelab Ubuntu only)
 └── Clone git@github.com:HiteshRepo/k3s-homelab.git → ~/workspace/k3s-homelab
@@ -38,9 +48,14 @@ setup-homelab.sh (optional, homelab Ubuntu only)
 
 ### Config Management
 
-`config/llm/extra-openai-models.yaml` is the source of truth for LLM model definitions. During bootstrap, it gets symlinked to `~/.config/io.datasette.llm/extra-openai-models.yaml`.
+Two configs are managed as symlinks from this repo:
 
-All models route through the LiteLLM proxy at `https://litellm.lab.hiteshp.in`. The proxy unifies access to OpenAI, Anthropic, and local Ollama models under a single API key (set via `llm keys set openai <master-key>`).
+| Source (repo) | Symlink destination | Tool |
+|---|---|---|
+| `config/llm/extra-openai-models.yaml` | `~/.config/io.datasette.llm/extra-openai-models.yaml` | `llm` CLI |
+| `config/aider/.aider.conf.yml` | `~/.aider.conf.yml` | `aider` |
+
+All models route through the LiteLLM proxy at `https://litellm.lab.hiteshp.in`. Both `llm` and `aider` use the same LiteLLM master key — stored in `~/.config/io.datasette.llm/keys.json` under key `openai`, and as `OPENAI_API_KEY` in the shell profile.
 
 ### Script Design Principles
 
