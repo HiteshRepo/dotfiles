@@ -27,7 +27,7 @@ set-ai-key: ## Set LiteLLM master key for llm and aider (usage: make set-ai-key 
 	@if [ -z "$(KEY)" ]; then \
 	  echo "Error: pass the key — make set-ai-key KEY=<master-key>"; exit 1; \
 	fi
-	@llm keys set openai $(KEY)
+	@echo "$(KEY)" | llm keys set openai
 	@echo "llm key set"
 	@SHELL_PROFILE=""; \
 	if [ -f "$$HOME/.zshrc" ]; then SHELL_PROFILE="$$HOME/.zshrc"; \
