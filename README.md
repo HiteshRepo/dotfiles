@@ -6,41 +6,51 @@ Personal machine bootstrap and configuration management system. Automates the se
 
 ```bash
 git clone git@github.com:HiteshRepo/dotfiles.git
-cd dotfiles/bootstrap
-bash bootstrap.sh
+cd dotfiles
+make bootstrap
 ```
 
 ## What Gets Set Up
 
 | Step | Script | What it does |
 |------|--------|--------------|
-| 1 | `setup-github-known-hosts.sh` | Adds GitHub's SSH host key to `~/.ssh/known_hosts` |
-| 2 | `setup-ssh-key.sh` | Generates an Ed25519 SSH key and adds it to the agent |
-| 3 | `setup-dev-tools.sh` | Installs `uv` and `llm`, symlinks LLM model config |
+| 1 | `setup-git.sh` | Installs git, sets global `user.name` / `user.email` |
+| 2 | `setup-github-known-hosts.sh` | Adds GitHub's SSH host key to `~/.ssh/known_hosts` |
+| 3 | `setup-ssh-key.sh` | Generates an Ed25519 SSH key and adds it to the agent |
+| 4 | `setup-dev-tools.sh` | Installs `uv`, `llm`, and `aider`; symlinks their configs |
 
 All scripts are idempotent — safe to re-run on an existing machine.
 
 ## Optional: Homelab Setup
 
-For the Ubuntu homelab laptop only, run after `bootstrap.sh`:
+For the Ubuntu homelab laptop only, run after `bootstrap`:
 
 ```bash
-bash bootstrap/setup-homelab.sh
+make homelab
 ```
 
-This clones `git@github.com:HiteshRepo/k3s-homelab.git` into `~/workspace/k3s-homelab` and optionally runs its first-time setup.
+This clones `git@github.com:HiteshRepo/k3s-homelab.git` into `~/workspace/k3s-homelab`.
 
-## LLM Configuration
+## LLM & AI Tool Configuration
 
-The `llm` CLI is configured to route all model requests through a LiteLLM proxy at `https://litellm.lab.hiteshp.in`. The config is sourced from `config/llm/extra-openai-models.yaml` and symlinked to `~/.config/io.datasette.llm/extra-openai-models.yaml`.
+`llm` and `aider` both route through a LiteLLM proxy at `https://litellm.lab.hiteshp.in`.
 
-After bootstrap, set the LiteLLM master key:
+After bootstrap, set the LiteLLM master key once:
 
 ```bash
-llm keys set openai <master-key>
+make set-ai-key KEY=<master-key>
 ```
 
-Available models:
+This writes the key to `~/.config/io.datasette.llm/keys.json` and exports `OPENAI_API_KEY` in your shell profile.
+
+### Config symlinks
+
+| Repo source | Symlink destination |
+|---|---|
+| `config/llm/extra-openai-models.yaml` | `~/.config/io.datasette.llm/extra-openai-models.yaml` |
+| `config/aider/.aider.conf.yml` | `~/.aider.conf.yml` |
+
+### Available models
 
 | Provider | Model |
 |----------|-------|
@@ -51,4 +61,17 @@ Available models:
 ```bash
 llm models list              # verify available models
 llm -m gpt-4o "Hello"        # test a model
+```
+
+## Make Targets
+
+```
+make bootstrap      Run full bootstrap
+make dev-tools      Install uv, llm, aider and symlink configs
+make homelab        Clone k3s-homelab (Ubuntu homelab only)
+make install-aider  Install aider via uv (python3.12)
+make set-ai-key     Set LiteLLM key (usage: make set-ai-key KEY=<key>)
+make symlink-aider  Symlink .aider.conf.yml to ~/
+make symlink-llm    Symlink extra-openai-models.yaml to ~/.config/io.datasette.llm/
+make help           Show all targets
 ```
