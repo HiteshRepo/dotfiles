@@ -55,7 +55,22 @@ Two configs are managed as symlinks from this repo:
 | `config/llm/extra-openai-models.yaml` | `~/.config/io.datasette.llm/extra-openai-models.yaml` | `llm` CLI |
 | `config/aider/.aider.conf.yml` | `~/.aider.conf.yml` | `aider` |
 
-All models route through the LiteLLM proxy at `https://litellm.lab.hiteshp.in`. Both `llm` and `aider` use the same LiteLLM master key — stored in `~/.config/io.datasette.llm/keys.json` under key `openai`, and as `OPENAI_API_KEY` in the shell profile.
+`llm` routes directly to the LiteLLM proxy at `https://litellm.lab.hiteshp.in`. Both tools use the same LiteLLM master key — stored in `~/.config/io.datasette.llm/keys.json` under key `openai`, and as `OPENAI_API_KEY` in the shell profile.
+
+**aider is different**: its config points to `http://localhost:4000/v1`, so it requires a live port-forward to the LiteLLM service before use:
+
+```bash
+kubectl port-forward svc/litellm 4000:4000 -n <namespace>
+```
+
+### SSL Environment Variables
+
+`setup-dev-tools.sh` appends these to `~/.zshrc` / `~/.bashrc` (needed for Python HTTP clients to trust the homelab's self-signed TLS cert):
+
+```bash
+export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+```
 
 ### Script Design Principles
 

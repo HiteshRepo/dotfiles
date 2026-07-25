@@ -33,8 +33,6 @@ This clones `git@github.com:HiteshRepo/k3s-homelab.git` into `~/workspace/k3s-ho
 
 ## LLM & AI Tool Configuration
 
-`llm` and `aider` both route through a LiteLLM proxy at `https://litellm.lab.hiteshp.in`.
-
 After bootstrap, set the LiteLLM master key once:
 
 ```bash
@@ -49,6 +47,12 @@ This writes the key to `~/.config/io.datasette.llm/keys.json` and exports `OPENA
 |---|---|
 | `config/llm/extra-openai-models.yaml` | `~/.config/io.datasette.llm/extra-openai-models.yaml` |
 | `config/aider/.aider.conf.yml` | `~/.aider.conf.yml` |
+
+`llm` connects directly to `https://litellm.lab.hiteshp.in`. `aider` connects to `http://localhost:4000/v1` and requires a port-forward first:
+
+```bash
+kubectl port-forward svc/litellm 4000:4000 -n <namespace>
+```
 
 ### Available models
 
