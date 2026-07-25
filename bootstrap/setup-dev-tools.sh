@@ -18,3 +18,17 @@ else
   uv tool install llm
   echo "llm installed"
 fi
+
+LLM_CONFIG_DIR="$HOME/.config/io.datasette.llm"
+LLM_MODELS_FILE="$LLM_CONFIG_DIR/extra-openai-models.yaml"
+LLM_MODELS_SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/config/llm/extra-openai-models.yaml"
+
+mkdir -p "$LLM_CONFIG_DIR"
+if [ -L "$LLM_MODELS_FILE" ]; then
+  echo "llm extra-openai-models.yaml already symlinked"
+elif [ -f "$LLM_MODELS_FILE" ]; then
+  echo "llm extra-openai-models.yaml already exists (not a symlink — skipping)"
+else
+  ln -s "$LLM_MODELS_SOURCE" "$LLM_MODELS_FILE"
+  echo "llm extra-openai-models.yaml symlinked"
+fi
