@@ -27,7 +27,12 @@ set-ai-key: ## Set LiteLLM master key for llm and aider (usage: make set-ai-key 
 	@if [ -z "$(KEY)" ]; then \
 	  echo "Error: pass the key — make set-ai-key KEY=<master-key>"; exit 1; \
 	fi
-	@echo "$(KEY)" | llm keys set openai
+	@python3 -c "\
+import json, os; \
+f = os.path.expanduser('~/.config/io.datasette.llm/keys.json'); \
+keys = json.load(open(f)) if os.path.exists(f) else {}; \
+keys['openai'] = '$(KEY)'; \
+json.dump(keys, open(f, 'w'), indent=2)"
 	@echo "llm key set"
 	@SHELL_PROFILE=""; \
 	if [ -f "$$HOME/.zshrc" ]; then SHELL_PROFILE="$$HOME/.zshrc"; \
