@@ -16,6 +16,17 @@ homelab: ## Clone and set up k3s-homelab (Ubuntu homelab laptop only)
 
 # ─── Symlinks ─────────────────────────────────────────────────────────────────
 
+.PHONY: symlink-aider
+symlink-aider: ## Symlink .aider.conf.yml to ~/
+	@if [ -L ~/.aider.conf.yml ]; then \
+	  echo "already symlinked"; \
+	elif [ -f ~/.aider.conf.yml ]; then \
+	  echo "file already exists (not a symlink — skipping)"; \
+	else \
+	  ln -s $(DOTFILES_DIR)/config/aider/.aider.conf.yml ~/.aider.conf.yml; \
+	  echo "symlinked"; \
+	fi
+
 .PHONY: symlink-llm
 symlink-llm: ## Symlink llm extra-openai-models.yaml to ~/.config/io.datasette.llm/
 	@mkdir -p ~/.config/io.datasette.llm
