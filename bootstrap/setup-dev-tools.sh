@@ -54,6 +54,16 @@ if [ -n "$SHELL_PROFILE" ]; then
   else
     echo "REQUESTS_CA_BUNDLE already in $SHELL_PROFILE"
   fi
+
+  MY_SCRIPTS_INIT="$HOME/Documents/personal/codebase/my-scripts/shell-init.sh"
+  if ! grep -q "my-scripts/shell-init.sh" "$SHELL_PROFILE"; then
+    echo '' >> "$SHELL_PROFILE"
+    echo '# my-scripts: developer tooling utilities' >> "$SHELL_PROFILE"
+    echo "source $MY_SCRIPTS_INIT" >> "$SHELL_PROFILE"
+    echo "my-scripts shell-init.sh sourced in $SHELL_PROFILE"
+  else
+    echo "my-scripts shell-init.sh already in $SHELL_PROFILE"
+  fi
 fi
 
 LLM_CONFIG_DIR="$HOME/.config/io.datasette.llm"

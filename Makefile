@@ -10,6 +10,10 @@ bootstrap: ## Run full bootstrap (SSH keys, GitHub known hosts, dev tools)
 dev-tools: ## Install dev tools (uv, llm) and symlink configs
 	bash bootstrap/setup-dev-tools.sh
 
+.PHONY: my-scripts
+my-scripts: ## Clone my-scripts repo to ~/Documents/personal/codebase/my-scripts
+	bash bootstrap/setup-my-scripts.sh
+
 .PHONY: homelab
 homelab: ## Clone and set up k3s-homelab (Ubuntu homelab laptop only)
 	bash bootstrap/setup-homelab.sh
