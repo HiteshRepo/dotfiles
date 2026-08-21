@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# ─── ffmpeg ───────────────────────────────────────────────────────────────────
+if command -v ffmpeg &>/dev/null; then
+  echo "ffmpeg already installed"
+else
+  echo "Installing ffmpeg..."
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install ffmpeg
+  else
+    sudo apt-get install -y ffmpeg
+  fi
+  echo "ffmpeg installed"
+fi
+
 # ─── uv (Python package manager) ──────────────────────────────────────────────
 if command -v uv &>/dev/null; then
   echo "uv already installed"
