@@ -13,7 +13,7 @@ Personal machine bootstrap and configuration management system. Automates the se
 make bootstrap          # or: bash bootstrap/bootstrap.sh
 
 # Individual steps (all idempotent)
-make dev-tools          # Install uv, llm, aider; symlink configs
+make dev-tools          # Install ffmpeg, uv, llm, aider; symlink configs
 make homelab            # Clone k3s-homelab (Ubuntu homelab only)
 
 # AI tool setup
@@ -40,7 +40,7 @@ bootstrap/bootstrap.sh (main entry)
 ├── setup-git.sh                 → Install git, set global user.name/email
 ├── setup-github-known-hosts.sh  → Add GitHub to ~/.ssh/known_hosts
 ├── setup-ssh-key.sh             → Generate Ed25519 key, add to ssh-agent
-└── setup-dev-tools.sh           → Install uv + llm + aider; symlink configs
+└── setup-dev-tools.sh           → Install ffmpeg + uv + llm + aider; symlink configs
 
 setup-homelab.sh (optional, homelab Ubuntu only)
 └── Clone git@github.com:HiteshRepo/k3s-homelab.git → ~/workspace/k3s-homelab

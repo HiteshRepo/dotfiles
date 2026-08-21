@@ -17,7 +17,7 @@ make bootstrap
 | 1 | `setup-git.sh` | Installs git, sets global `user.name` / `user.email` |
 | 2 | `setup-github-known-hosts.sh` | Adds GitHub's SSH host key to `~/.ssh/known_hosts` |
 | 3 | `setup-ssh-key.sh` | Generates an Ed25519 SSH key and adds it to the agent |
-| 4 | `setup-dev-tools.sh` | Installs `uv`, `llm`, and `aider`; symlinks their configs |
+| 4 | `setup-dev-tools.sh` | Installs `ffmpeg`, `uv`, `llm`, and `aider`; symlinks their configs |
 
 All scripts are idempotent — safe to re-run on an existing machine.
 
@@ -71,7 +71,7 @@ llm -m gpt-4o "Hello"        # test a model
 
 ```
 make bootstrap      Run full bootstrap
-make dev-tools      Install uv, llm, aider and symlink configs
+make dev-tools      Install ffmpeg, uv, llm, aider and symlink configs
 make homelab        Clone k3s-homelab (Ubuntu homelab only)
 make install-aider  Install aider via uv (python3.12)
 make set-ai-key     Set LiteLLM key (usage: make set-ai-key KEY=<key>)
